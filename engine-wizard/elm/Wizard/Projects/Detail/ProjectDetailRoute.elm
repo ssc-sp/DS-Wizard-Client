@@ -1,7 +1,6 @@
 module Wizard.Projects.Detail.ProjectDetailRoute exposing (ProjectDetailRoute(..))
 
 import Shared.Data.PaginationQueryString exposing (PaginationQueryString)
-import Uuid exposing (Uuid)
 
 
 type ProjectDetailRoute
@@ -9,5 +8,5 @@ type ProjectDetailRoute
     | Preview
     | Metrics
     | Documents PaginationQueryString
-    | NewDocument (Maybe Uuid)
+    | NewDocument (Maybe String)
     | Settings

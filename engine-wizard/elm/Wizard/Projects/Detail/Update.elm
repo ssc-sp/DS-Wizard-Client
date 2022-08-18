@@ -75,9 +75,9 @@ fetchSubrouteData appState model =
                     Cmd.map DocumentsMsg <|
                         Documents.fetchData
 
-                PlanDetailRoute.NewDocument mbEventUuid ->
+                PlanDetailRoute.NewDocument _ ->
                     Cmd.map NewDocumentMsg <|
-                        NewDocument.fetchData appState uuid mbEventUuid
+                        NewDocument.fetchData appState uuid
 
                 _ ->
                     Cmd.none

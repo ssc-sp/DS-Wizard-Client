@@ -9,7 +9,6 @@ module Wizard.Common.Components.Questionnaire exposing
     , RightPanel
     , TypeHints
     , addComment
-    , addEvent
     , clearReply
     , deleteComment
     , deleteCommentThread
@@ -42,7 +41,6 @@ import Maybe.Extra as Maybe
 import Random exposing (Seed)
 import Regex
 import Roman
-import Shared.Api.Questionnaires as QuestionnairesApi
 import Shared.Api.TypeHints as TypeHintsApi
 import Shared.Common.TimeUtils as TimeUtils
 import Shared.Components.Badge as Badge
@@ -127,7 +125,6 @@ type alias Model =
     , activePage : ActivePage
     , rightPanel : RightPanel
     , questionnaire : QuestionnaireDetail
-    , questionnaireEvents : ActionResult (List QuestionnaireEvent)
     , removeItem : Maybe ( String, String )
     , typeHints : Maybe TypeHints
     , typeHintsDebounce : Debounce ( List String, String, String )
@@ -188,7 +185,6 @@ init appState questionnaire =
     , activePage = activePage
     , rightPanel = RightPanelNone
     , questionnaire = questionnaire
-    , questionnaireEvents = ActionResult.Unset
     , removeItem = Nothing
     , typeHints = Nothing
     , typeHintsDebounce = Debounce.init
@@ -208,11 +204,6 @@ init appState questionnaire =
     , splitPane = SplitPane.init SplitPane.Horizontal |> SplitPane.configureSplitter (SplitPane.percentage 0.2 (Just ( 0.05, 0.7 )))
     , navigationTreeModel = navigationTreeModel
     }
-
-
-addEvent : QuestionnaireEvent -> Model -> Model
-addEvent event model =
-    { model | questionnaireEvents = ActionResult.map (\events -> events ++ [ event ]) model.questionnaireEvents }
 
 
 setActiveChapterUuid : String -> Model -> Model
@@ -345,7 +336,6 @@ type Msg
     | SetLabels String (List String)
     | ViewSettingsDropdownMsg Dropdown.State
     | SetViewSettings QuestionnaireViewSettings
-    | GetQuestionnaireEventsComplete (Result ApiError (List QuestionnaireEvent))
     | HistoryMsg History.Msg
     | VersionModalMsg VersionModal.Msg
     | DeleteVersionModalMsg DeleteVersionModal.Msg
@@ -400,15 +390,7 @@ update msg wrapMsg mbSetFullscreenMsg appState ctx model =
                 )
 
         SetRightPanel rightPanel ->
-            let
-                cmd =
-                    if rightPanel == RightPanelHistory then
-                        QuestionnairesApi.getQuestionnaireEvents model.uuid appState GetQuestionnaireEventsComplete
-
-                    else
-                        Cmd.none
-            in
-            withSeed ( { model | rightPanel = rightPanel, questionnaireEvents = ActionResult.Loading }, cmd )
+            wrap { model | rightPanel = rightPanel }
 
         SetFullscreen fullscreen ->
             case mbSetFullscreenMsg of
@@ -509,15 +491,6 @@ update msg wrapMsg mbSetFullscreenMsg appState ctx model =
 
         SetViewSettings viewSettings ->
             wrap { model | viewSettings = viewSettings }
-
-        GetQuestionnaireEventsComplete result ->
-            wrap <|
-                case result of
-                    Ok questionnaireHistory ->
-                        { model | questionnaireEvents = Success questionnaireHistory }
-
-                    Err _ ->
-                        { model | questionnaireEvents = Error (lg "apiError.questionnaires.events.getListError" appState) }
 
         HistoryMsg historyMsg ->
             wrap { model | historyModel = History.update historyMsg model.historyModel }
@@ -1203,7 +1176,7 @@ viewQuestionnaireRightPanel appState cfg model =
                     }
             in
             wrapPanel <|
-                [ History.view appState historyCfg model.historyModel model.questionnaireEvents
+                [ History.view appState historyCfg model.historyModel
                 , Html.map (cfg.wrapMsg << VersionModalMsg) <| VersionModal.view appState model.versionModalModel
                 , Html.map (cfg.wrapMsg << DeleteVersionModalMsg) <| DeleteVersionModal.view appState model.deleteVersionModalModel
                 ]
