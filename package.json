@@ -4,7 +4,7 @@
   "repository": "https://github.com/ds-wizard/engine-frontend",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "npm run build:registry && npm run build:wizard",
+    "build": "npm run build:registry && npm run build:wizard && npm run build:version",
     "build:registry": "COMPONENT=registry ./scripts/build.sh",
     "build:wizard": "COMPONENT=wizard ./scripts/build.sh",
     "clean": "rm -rf dist",
@@ -13,6 +13,7 @@
     "start:wizard": "COMPONENT=wizard webpack serve",
     "test": "npm run test:elm && npm run test:registry:icon-set && npm run test:registry:locale && npm run test:shared:icon-set && npm run test:shared:locale && npm run test:wizard:icon-set && npm run test:wizard:locale",
     "test:elm": "elm-test && elm-review",
+    "build:version": "COMPONENT=wizard ./scripts/replace_version.sh && COMPONENT=registry ./scripts/replace_version.sh",
     "test:registry": "npm run test:elm && npm run test:registry:icon-set && npm run test:registry:locale",
     "test:registry:icon-set": "COMPONENT=registry node scripts/test-icon-set.js",
     "test:registry:locale": "COMPONENT=registry node scripts/test-locale.js",
@@ -57,6 +58,8 @@
     "axios-retry": "^3.3.1",
     "bootstrap": "^5.2.0",
     "chart.js": "^3.8.2",
-    "flatpickr": "^4.6.13"
+    "elm-format": "^0.8.5",
+    "flatpickr": "^4.6.13",
+    "package.json": "^2.0.1"
   }
 }
