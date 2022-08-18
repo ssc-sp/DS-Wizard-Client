@@ -8,9 +8,7 @@
     "init": "./scripts/init.sh",
     "start": "NODE_ENV=production node index.js",
     "clean": "rm -rf ./src",
-    "test": "NODE_ENV=test jest --silent=false --testTimeout=20000 --runInBand --detectOpenHandles",
-    "lambda:test": "sam local invoke \"SimpleFn\" -e event.json",
-    "lambda:build": "./scripts/build-lambda.sh"
+    "test": "NODE_ENV=test jest --silent=false --testTimeout=20000 --runInBand --detectOpenHandles"
   },
   "license": "Apache-2.0",
   "dependencies": {
