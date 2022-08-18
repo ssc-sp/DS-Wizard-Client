@@ -4,7 +4,6 @@ elm-stuff
 
 # build
 dist
-buildimage.sh
 
 # docs
 .doit.db
