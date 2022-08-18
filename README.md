@@ -7,6 +7,7 @@
     - [**Development**](#development)
     - [**Implementation**](#implementation)
   - [**Debugging**](#debugging)
+  - [**Deprecated**](#deprecated)
 
 This repository is a fork of the [Data Stewardship Wizard Engine Frontend](https://github.com/ds-wizard/engine-frontend). It is used for evaluating, and making changes relating to the Government of Canada common look and feel.
 
@@ -26,24 +27,24 @@ This repo uses v3.14 of the frontend, which at the time of writing this, is the 
 
 Begin by cloning the repo. For v3.14:
 ```
-$ git clone https://github.com/ssc-sp/engine-frontend.git .
+$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git .
 ```
 
 For other versions:
 ```
-$ git clone -b <tag name> https://github.com/ds-wizard/engine-frontend.git .
+$ git clone -b <tag name> https://github.com/ds-wizard/DS-Wizard-Client.git .
 ```
 
 Afterwards, install the required dependencies:
 ```
-$ cd engine-frontend
+$ cd DS-Wizard-Client
 $ npm install
 ```
 
 ## **Workflow**
 ### **Development**
 
-After cloning the engine-frontend repo and doing the setup, you can make the appropriate changes to the frontend. In order to test out if your changes have broken the application, run the following:
+After cloning the DS-Wizard-Client repo and doing the setup, you can make the appropriate changes to the frontend. In order to test out if your changes have broken the application, run the following:
 ```
 $ npm run test
 ```
@@ -55,11 +56,26 @@ $ git push
 ```
 
 ### **Implementation**
-On the environment where you want to implement those changes (either devbox or production), clone/pull this repo and repeat setup (if needed). There are several ways to implement changes:
 
-1. **Create custom image**
+1. **Quick implementation (for devbox only)**
 
-    This method creates a custom image, which we use to replace the dsw-client image used in the running dsw-deployment-example instance. We can create a custom image in the following way:
+    Clone this repo, run the setup and afterwards run the following:
+    ```
+    cd DS-Wizard-Client
+    bash scripts/buildimage.sh
+    ```
+    This will run the tests, build the application and build the docker image. Afterwards, simply make sure that your deployment uses this custom image, inside `docker-compose.yml`:
+    ```
+    dsw-client:
+        #image:datastewardshipwizard/wizard-client:3.14
+        image:dsw-client-ssc
+    ```
+
+2. **Other implementation**
+
+    On the environment where you want to implement those changes (either devbox or production), clone/pull this repo and repeat setup (if needed). 
+
+    Afterwards
     ```
     $ npm run test #Optional
     $ npm run build
@@ -77,50 +93,6 @@ On the environment where you want to implement those changes (either devbox or p
     $ docker-compose up -d
     ```
     Your changes should appear.
-
-2. **Overriding specific files**
-
-    This method uses volumes to override specific files inside of the dsw-client container. This method works well for assets (favicon, etc).
-
-    Similarly to before, build this application:
-    ```
-    $ npm run test #Optional
-    $ npm run build
-    ```
-    This will create a `dist` folder which is a compiled distributable. Afterward, you can navigate to the running `dsw-deployment-example` instance and modify the volumes of the `dsw-client` service in the `docker-compose.yml` in order to override the specific files inside the container:
-    ```
-    volumes:
-        - /absolute_path_to_engine-frontend_repo/dist/engine-wizard/file_to_override:/usr/share/nginx/html/file_to_override
-    ```
-    This takes the file from the compiled build of the engine-frontend and copies it into the compiled build of engine-frontend that is inside the `dsw-client` container. You can test your changes as such:
-    ```
-    $ docker-compose down
-    $ docker-compose up -d
-    ```
-    And then navigate to the client webpage.
-
-    This method works well for assets, but it does not really work well for code.
-
-3. **Overriding the entire compiled folder**
-
-    Similarly to the previous method, this method takes the approach of overriding the whole compiled folder using a volume. This method is great for development as it is more general (encompasses multiple changes at once) and faster than creating a custom image.
-
-    Similarly to before, build the application:
-    ```
-    $ npm run test #Optional
-    $ npm run build
-    ```
-    Afterward, you can navigate to the running `dsw-deployment-example` instance and modify the volumes of the `dsw-client` service in the `docker-compose.yml` in order to override the whole compiled folder inside the container:
-    ```
-    volumes:
-        - /absolute_path_to_engine-frontend_repo/dist/engine-wizard:/usr/share/nginx/html
-    ```
-    This overrides the entire application folder inside the container with the folder you built containing your changes. You can test your changes by running:
-    ```
-    $ docker-compose down
-    $ docker-compose up -d
-    ```
-    And then navigate to the client webpage.
 
 ## **Debugging**
 
@@ -154,3 +126,51 @@ In order to figure out the cause of the issue, we looked through the entire (thi
 In addition we tried running `diff` and [prettydiff](https://prettydiff.com/) on the `.js` files, comparing the JS script created by the engine-frontend repo and the JS script running inside the `dsw-client` container of `dsw-deployment-example`. Both `diff` and prettydiff crashed.
 
 We then contacted the DS-Wizard team on Slack and they indicated that there was an issue with the version of the backend. Modifying the version of the backend fixed this error.
+
+## **Deprecated**
+
+This section lists previous methods that were considered for workflow but were rejected.
+
+1. **Overriding specific files**
+
+    This method uses volumes to override specific files inside of the dsw-client container. This method works well for assets (favicon, etc).
+
+    Similarly to before, build this application:
+    ```
+    $ npm run test #Optional
+    $ npm run build
+    ```
+    This will create a `dist` folder which is a compiled distributable. Afterward, you can navigate to the running `dsw-deployment-example` instance and modify the volumes of the `dsw-client` service in the `docker-compose.yml` in order to override the specific files inside the container:
+    ```
+    volumes:
+        - /absolute_path_to_engine-frontend_repo/dist/engine-wizard/file_to_override:/usr/share/nginx/html/file_to_override
+    ```
+    This takes the file from the compiled build of the engine-frontend and copies it into the compiled build of engine-frontend that is inside the `dsw-client` container. You can test your changes as such:
+    ```
+    $ docker-compose down
+    $ docker-compose up -d
+    ```
+    And then navigate to the client webpage.
+
+    This method works well for assets, but it does not really work well for code.
+
+2. **Overriding the entire compiled folder**
+
+    Similarly to the previous method, this method takes the approach of overriding the whole compiled folder using a volume. This method is great for development as it is more general (encompasses multiple changes at once) and faster than creating a custom image.
+
+    Similarly to before, build the application:
+    ```
+    $ npm run test #Optional
+    $ npm run build
+    ```
+    Afterward, you can navigate to the running `dsw-deployment-example` instance and modify the volumes of the `dsw-client` service in the `docker-compose.yml` in order to override the whole compiled folder inside the container:
+    ```
+    volumes:
+        - /absolute_path_to_engine-frontend_repo/dist/engine-wizard:/usr/share/nginx/html
+    ```
+    This overrides the entire application folder inside the container with the folder you built containing your changes. You can test your changes by running:
+    ```
+    $ docker-compose down
+    $ docker-compose up -d
+    ```
+    And then navigate to the client webpage.
