@@ -6,8 +6,8 @@ module Wizard.Common.View.Layout exposing
     )
 
 import Browser exposing (Document)
-import Html exposing (Html, a, div, li, nav, span, text, ul, hr, header, footer, h2, img)
-import Html.Attributes exposing (class, classList, href, target, id, src, alt)
+import Html exposing (Html, a, div, li, nav, span, text, ul, hr, header, footer, h2, img, section, form, input, button, datalist, i)
+import Html.Attributes exposing (class, classList, href, target, id, src, alt, lang, property, action, method, name, attribute, style, type_, list, value, size, maxlength, placeholder)
 import Shared.Data.BootstrapConfig.LookAndFeelConfig as LookAndFeelConfig
 import Shared.Data.BootstrapConfig.LookAndFeelConfig.CustomMenuLink exposing (CustomMenuLink)
 import Shared.Html exposing (emptyNode, fa, faSet)
@@ -130,175 +130,10 @@ publicHeader fluid model =
                     ]
                 , signUpLink
                 ]
-        gcheader =
-            header []
-            [ div [ class "container", id "wb-bnr" ]
-                [ div [ class "row" ]
-                    [ text "Language"
-                    , text "Branding"
-                    , text "Search"
-                    ]
-                ]
-            , hr []
-                []
-            , div [ class "container" ]
-                [ div [ class "row" ]
-                    [ div [ class "col-md-8" ]
-                        [ text "Site Menu" ]
-                    , div [ class "col-xs-5 col-xs-offset-7 col-md-offset-0 col-md-4" ]
-                        [ text "Breadcrumbs" ]
-                    ]
-                ]
-            , text ""
-            ]
-        gcfooter = 
-            footer [ id "wb-info"]
-            [ div [ class "landscape"]
-                [ div
-                    [ class "container wb-navcurr"
-                    ]
-                    [ h2
-                        [ class "wb-inv"
-                        ]
-                        [ text "About government" ]
-                    , ul
-                        [ class "list-unstyled colcount-xs-2 colcount-md-3"
-                        ]
-                        [ li []
-                            [ a
-                                [ href "https://www.canada.ca/en/contact.html"
-                                ]
-                                [ text "Contact us" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://www.canada.ca/en/government/dept.html"
-                                ]
-                                [ text "Departments and agencies" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://www.canada.ca/en/government/publicservice.html"
-                                ]
-                                [ text "Public service and military" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://www.canada.ca/en/news.html"
-                                ]
-                                [ text "News" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://www.canada.ca/en/government/system/laws.html"
-                                ]
-                                [ text "Treaties, laws and regulations" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://www.canada.ca/en/transparency/reporting.html"
-                                ]
-                                [ text "Government-wide reporting" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://pm.gc.ca/eng"
-                                ]
-                                [ text "Prime Minister" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://www.canada.ca/en/government/system.html"
-                                ]
-                                [ text "How government works" ]
-                            ]
-                        , li []
-                            [ a
-                                [ href "https://open.canada.ca/en/"
-                                ]
-                                [ text "Open government" ]
-                            ]
-                        ]
-                    ]
-                ]
-            , div
-                [ class "brand"
-                ]
-                [ div
-                    [ class "container"
-                    ]
-                    [ div
-                        [ class "row"
-                        ]
-                        [ nav [ class "col-md-9 col-lg-10 ftr-urlt-lnk"
-                            ]
-                            [ h2
-                                [ class "wb-inv"
-                                ]
-                                [ text "About this site" ]
-                            , ul []
-                                [ li []
-                                    [ a
-                                        [ href "https://www.canada.ca/en/social.html"
-                                        ]
-                                        [ text "Social media" ]
-                                    ]
-                                , li []
-                                    [ a
-                                        [ href "https://www.canada.ca/en/mobile.html"
-                                        ]
-                                        [ text "Mobile applications" ]
-                                    ]
-                                , li []
-                                    [ a
-                                        [ href "https://www1.canada.ca/en/newsite.html"
-                                        ]
-                                        [ text "About Canada.ca" ]
-                                    ]
-                                , li []
-                                    [ a
-                                        [ href "https://www.canada.ca/en/transparency/terms.html"
-                                        ]
-                                        [ text "Terms and conditions" ]
-                                    ]
-                                , li []
-                                    [ a
-                                        [ href "https://www.canada.ca/en/transparency/privacy.html"
-                                        ]
-                                        [ text "Privacy" ]
-                                    ]
-                                ]
-                            ]
-                        , div
-                            [ class "col-xs-6 visible-sm visible-xs tofpg"
-                            ]
-                            [ a
-                                [ href "#wb-cont"
-                                ]
-                                [ text "Top of Page", span
-                                    [ class "glyphicon glyphicon-chevron-up"
-                                    ]
-                                    []
-                                ]
-                            ]
-                        , div
-                            [ class "col-xs-6 col-md-3 col-lg-2 text-right"
-                            ]
-                            [ img
-                                [ src "https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/wmms-blk.svg"
-                                , alt "Symbol of the Government of Canada"
-                                ]
-                                []
-                            ]
-                        ]
-                    ]
-                ]
-            ]
     in
     nav [ class "navbar navbar-expand-sm fixed-top px-3 top-navigation" ]
         [ div [ classList [ ( "container-fluid", fluid ), ( "container", not fluid ) ] ]
-            [ gcheader
-            , div [ class "navbar-header" ]
+            [ div [ class "navbar-header" ]
                 [ linkTo model.appState
                     Routes.publicHome
                     [ class "navbar-brand", dataCy "nav_app-title" ]
@@ -306,7 +141,6 @@ publicHeader fluid model =
                     ]
                 ]
             , ul [ class "nav navbar-nav ms-auto flex-row" ] links
-            , gcfooter
             ]
         ]
 
@@ -332,12 +166,62 @@ app model content =
             [ div [ class "container", id "wb-bnr" ]
                 [ div [ class "row" ]
                     [ text "Language"
-                    , text "Branding"
-                    , text "Search"
+                    , div [class "brand col-xs-9 col-sm-5 col-md-4"] [a [ href "https://www.canada.ca/en.html"]
+                        [ img [ alt "Gouvernement du Canada", src "https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/sig-blk-fr.svg" ][]
+                        , span [ class "wb-inv" ][ span [ lang "en" ][]]
+                        ]]
+                    , section[ id "wb-srch"
+                                , class "col-lg-offset-4 col-md-offset-4 col-sm-offset-2 col-xs-12 col-sm-5 col-md-4"]
+                            [ form
+                                [ action "https://www.canada.ca/en/sr/srb.html"
+                                , method "get"
+                                , name "cse-search-box"
+                                , attribute "role" "search"
+                                , class "srchbox"
+                                ]
+                                [ div
+                                    [ class "form-group wb-srch-qry"
+                                    , style "width" "100%"
+                                    ]
+                                    [ input
+                                        [ id "wb-srch-q"
+                                        , list "wb-srch-q-ac"
+                                        , class "wb-srch-q form-control"
+                                        , name "q"
+                                        , type_ "search"
+                                        , value ""
+                                        , size 34
+                                        , maxlength 170
+                                        , placeholder "Search Canada.ca"
+                                        ]
+                                        []
+                                    , datalist
+                                        [ id "wb-srch-q-ac"
+                                        , style "display" "none"
+                                        ]
+                                        []
+                                    ]
+                                , div
+                                    [ class "form-group submit"
+                                    ]
+                                    [ button
+                                        [ type_ "submit"
+                                        , id "wb-srch-sub"
+                                        , class "btn btn-primary btn-small"
+                                        , name "wb-srch-sub"
+                                        ]
+                                        [ i
+                                            [ class "fas fa-search"
+                                            , attribute "aria-hidden" "true"
+                                            ]
+                                            []
+                                        ]
+                                    ]
+                                ]
+                            ]
                     ]
                 ]
-            , hr []
-                []
+            , hr [][]
             , div [ class "container" ]
                 [ div [ class "row" ]
                     [ div [ class "col-md-8" ]
@@ -430,38 +314,32 @@ app model content =
                         [ nav [ class "col-md-9 col-lg-10 ftr-urlt-lnk"
                             ]
                             [ h2
-                                [ class "wb-inv"
-                                ]
+                                [ class "wb-inv"]
                                 [ text "About this site" ]
                             , ul []
                                 [ li []
                                     [ a
-                                        [ href "https://www.canada.ca/en/social.html"
-                                        ]
+                                        [ href "https://www.canada.ca/en/social.html"]
                                         [ text "Social media" ]
                                     ]
                                 , li []
                                     [ a
-                                        [ href "https://www.canada.ca/en/mobile.html"
-                                        ]
+                                        [ href "https://www.canada.ca/en/mobile.html"]
                                         [ text "Mobile applications" ]
                                     ]
                                 , li []
                                     [ a
-                                        [ href "https://www1.canada.ca/en/newsite.html"
-                                        ]
+                                        [ href "https://www1.canada.ca/en/newsite.html"]
                                         [ text "About Canada.ca" ]
                                     ]
                                 , li []
                                     [ a
-                                        [ href "https://www.canada.ca/en/transparency/terms.html"
-                                        ]
+                                        [ href "https://www.canada.ca/en/transparency/terms.html"]
                                         [ text "Terms and conditions" ]
                                     ]
                                 , li []
                                     [ a
-                                        [ href "https://www.canada.ca/en/transparency/privacy.html"
-                                        ]
+                                        [ href "https://www.canada.ca/en/transparency/privacy.html"]
                                         [ text "Privacy" ]
                                     ]
                                 ]
