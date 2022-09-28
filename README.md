@@ -19,7 +19,74 @@ In order to apply the Government of Canada common look and feel, we must modify 
 
 The `dsw-client` image is created by testing and building the node.js application. Building the application creates a `dist` folder, which contains a compiled distributable of the application. Building the image using the Dockerfile for the engine-wizard makes a copy of the engine-wizard located in the `dist` folder, into the container. This compilation/building step has implications that will later be talked about.
 
-## **Setup**
+## **Development**
+### **Setup**
+The development of this application will be done by having a local instance of the base DS-Wizard app, then applying the changes to this instance. Deployment/testing is done by sending those changes onto our dev-box/production environments.
+
+In order to develop, you should:
+1. [Have Docker Desktop installed on your development machine](https://www.docker.com/products/docker-desktop/)
+2. Have access to a linux distro console. On Windows 10/11, you can obtain a Ubuntu subsystem by running the following in your terminal:
+    ```
+    $ wsl.exe --install -d Ubuntu
+    ```
+    After doing so, you may need to restart your computer. Afterwards, you will need to go in Docker Desktop, then into settings -> Resources -> WSL Integration and enable Docker Desktop for your Ubuntu subsystem, which will be available to you by searching "Ubuntu" in the search bar. 
+
+    The first time you open your Ubuntu subsystem you will prompted to create a UNIX user. Make sure you remember your user and password.
+
+    Most macOS computers should be able to run everything from the terminal app.
+
+Once you have met these requirements, access your terminal, and run:
+```
+$ sudo su
+```
+Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm and elm as well as cloning the necessary repository:
+```
+$ cd $HOME
+$ apt update
+$ apt install nodejs npm
+$ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+$ gunzip elm.gz
+$ chmod +x elm
+$ sudo mv elm /usr/local/bin/
+$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
+$ git clone https://github.com/ds-wizard/dsw-deployment-example.git
+```
+Test that everything has been done correctly by running the following:
+```
+$ node -v
+$ npm --help
+$ elm --help
+```
+Now let us modify the `docker-compose.yml` file located in `dsw-deployment-example` in order to run our custom image instead of the base image:
+```
+$ vi dsw-deployment-example/docker-compose.yml
+```
+And edit the `dsw-client` section as such:
+```
+  dsw-client:
+    # image: datastewardshipwizard/wizard-client
+    image: dsw-client-ssc
+    restart: always
+    ports:
+      - 127.0.0.1:8080:80
+    environment:
+      API_URL: http://localhost:3000
+```
+In order to edit, press "i" in your keyboard, do your edits, then press "ESC" followed by ":wq!", which will write your edits and quit the editor. From there, you should be able to fully run your local instance:
+```
+$ cd DS-Wizard-Client
+$ bash scripts/buildimage.sh
+```
+You can check that your instance is running by accessing [localhost:8080](localhost:8080).
+
+### **Workflow**
+In order to make changes to the front-end of DS-Wizard, you need to clone the repository anywhere you are most comfortable with:
+```
+$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
+```
+You will not be 
+
+## **Deployment**
 
 Before we begin, make sure you have `nodejs`, `npm` and Docker installed and updated.
 
