@@ -43,15 +43,16 @@ Once you have met these requirements, access your Linux terminal, and run:
 ```
 $ sudo su
 ```
-Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm and elm:
+Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm, dos2unix and elm:
 ```
 $ cd $HOME
 $ apt update
-$ apt install nodejs npm
+$ apt install nodejs npm dos2unix
 $ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
 $ gunzip elm.gz
 $ chmod +x elm
-$ sudo mv elm /usr/local/bin/
+$ mv elm /usr/local/bin/
+$ dos2unix DS-Wizard/scripts/buildimage.sh
 ```
 Test that everything has been done correctly by running the following:
 ```
@@ -62,6 +63,10 @@ $ elm --help
 Subsystem have access to the hosts' file system through the `/mnt` folder, and so to avoid duplicating the github repo, let us create a symlink that links to where we originally cloned our repository:
 ```
 $ ln -s /mnt/absolute/path/to/repo/DS-Wizard-Client $HOME/DS-Wizard-Client
+```
+Then, you will need to install the npm dependencies:
+```
+$ npm install
 ```
 From there, you should be able to fully run your local instance:
 ```
@@ -104,8 +109,21 @@ $ git push
 
 ## **Deployment**
 
-
-
+In your deployment environment (either the devbox or the production environment), you can deploy your changes by first pulling changes (if this repo is already present):
+```
+$ cd $HOME/DS-Wizard-Client
+$ git pull
+```
+Or by cloning the repository:
+```
+$ cd $HOME
+$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
+```
+Afterwards, you will need to go through `dsw-deployment-example/docker-compose.yml` as well as `dsw-deployment-example/dsw.yml` in order to replace all port lines with the lines that indicate "Use this line for deployment". The port lines currently indicated to be for deployment use the devbox ports: if you are deploying to production you will need to modify these. Afterwards, if it is the first time running this application on this deployment environment, you will need to go through the Setup section above. Once that is done, running the following should have the app up and ready:
+```
+$ cd $HOME/DS-Wizard-Client
+$ bash scripts/buildimage.sh
+```
 ## **Debugging**
 
 While working on this, we ran into the following issue when trying to load the client with a different image:
