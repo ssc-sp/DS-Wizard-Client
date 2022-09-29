@@ -1,0 +1,26 @@
+general:
+  # clientUrl: http://20.104.20.37:8080 #Use this line in deployment
+  clientUrl: http://127.0.0.1:8080
+  secret: 
+  serviceToken: 
+# !! Change the secrets if exposing the service
+
+database:
+  connectionString: postgresql://postgres:postgres@postgres:5432/engine-wizard
+
+s3:
+  url: http://minio:9000
+  username: minio
+  password: minioPassword
+  bucket: engine-wizard
+
+mail:
+  enabled: true
+  name: DMP-WCanada-A-PDDCanda
+  email: dataforscience.donotreply-nepasrepondre.donneesscientifiques@ssc-spc.gc.ca 
+  host: email-smtp.ca-central-1.amazonaws.com
+  port: 465
+  ssl: true
+  authEnabled: true
+  username: 
+  password: 
