@@ -17,9 +17,11 @@ services:
     #image: datastewardshipwizard/wizard-client
     restart: always
     ports:
-      - 8080:80
+       - 127.0.0.1:8080:80
+    #  - 8080:80 #Use this line in deployment
     environment:
-      API_URL: http://20.104.20.37:3000
+      API_URL: http://localhost:3000
+    #  API_URL: http://20.104.20.37:3000 #Use this line in deployment
     volumes:
       - ./assets/extra.scss:/src/scss/customizations/_extra.scss
       - ./assets/extra.scss:/src/scss/customizations/_overrides.scss
