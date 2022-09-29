@@ -14,3 +14,7 @@ config.js
 
 # locale
 locale
+
+# dsw-deployment-example
+dsw-deployment-example/db-data/data
+dsw-deployment-example/s3-data/data

@@ -1,0 +1,31 @@
+#Dump/export the database
+#Works
+#requires postgres as the user
+
+#azure postgres does not allow access to superuser
+#-Fc require workaround for docker
+#https://stackoverflow.com/questions/63934856/why-is-pg-restore-segfaulting-in-docker#:~:text=The%20problem%20is%20caused%20by%20a%20corruption%20when,Somewhere%20on%20the%20way%2C%20non-ASCII%20bytes%20are%20corrupted.
+
+
+#Dump and load roles
+docker exec -t dsw-deployment-example_postgres_1 pg_dumpall -r --host=localhost --dbname=postgres -U postgres > roles.dump
+psql "host=scsccld-dswizard-sdb.postgres.database.azure.com port=5432 dbname=engine-wizard user=dswizard@scsccld-dswizard-sdb password=cd2b6576-8441-49ab-9159-5018392c60d0 sslmode=require" < ./roles.sql
+
+
+#Dump and load the data
+docker exec -t dsw-deployment-example_postgres_1 pg_dump --clean -Fc --host=localhost --dbname=postgres -U postgres -f export.dump
+docker cp dsw-deployment-example_postgres_1:/export.dump export.dump
+
+#Using restore
+pg_restore --verbose --no-owner -h scsccld-dswizard-sdb.postgres.database.azure.com -p 5432 -d engine-wizard -U dswizard@scsccld-dswizard-sdb ./export.dump
+
+#Erase the existing azure db
+#Works
+dropdb engine-wizard -h scsccld-dswizard-sdb.postgres.database.azure.com -p 5432  -U dswizard@scsccld-dswizard-sdb
+
+#Recreate the db 
+createdb engine-wizard -O dswizard -h scsccld-dswizard-sdb.postgres.database.azure.com -p 5432  -U dswizard@scsccld-dswizard-sdb
+
+password=cd2b6576-8441-49ab-9159-5018392c60d0
+
+pg_dumpall -d engine-wizard -h scsccld-dswizard-sdb.postgres.database.azure.com -p 5432  -U dswizard@scsccld-dswizard-sdb > azuredump.sql

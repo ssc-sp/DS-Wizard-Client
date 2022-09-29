@@ -1,0 +1,527 @@
+$side-navigation-logo-url: url(../assets/Maple_Leaf_White.svg);
+$illustrations-color: rgb(255, 255, 255);
+/*
+
+ Global variables for GCWeb
+
+*/
+
+$bg-gctheme: #355688; // Blue gc theme background.
+$primary: $bg-gctheme;
+$bg-color: $primary;
+$wbGray: #e1e4e7;
+
+$button-blue: #284162;
+
+$wbGrayLight: #eaebed;
+
+$accent-blue: #26374a;
+
+$border-red: #af3c43;
+
+$active-blue: #243850;
+
+$search-gray: #e0e0e0;
+
+$profile-gray: #eaebed;
+
+$gray-light: #6f6f6f; // Light grey colour (Bootstrap override).
+
+
+
+// Colours for the alert styles
+
+$alert-danger-color: #d3080c;
+
+$alert-warning-color: #ee7100;
+
+$alert-info-color: #269abc;
+
+$alert-success-color: #278400;
+
+// Body
+
+$body-bg: #fff; // Body element's background colour (WET-BOEW override).
+
+$font-family-base: "Noto Sans", sans-serif; // (Bootstrap override), "Noto Sans" is a Google font but it is not loaded yet
+
+// Exclude temporary the form element from the font update, keep same style as before
+
+$input-height-base: 37px;
+
+
+
+// Button - Ensure we have a target touch of 44px x 44px, the following value was set based on the top right search button.
+
+$padding-base-vertical: 10px;
+
+$padding-base-horizontal: 14px;
+
+
+
+/* Headings font-sizes */
+
+$font-size-h1: 1.9em; // expected 38px;
+
+$font-size-h2: 1.8em; // expected 36px;
+
+$font-size-h3: 1.2em; // expected 24px;
+
+$font-size-h4: 1.1em; // expected 22px;
+
+$font-size-h5: 1em; // expected 20px;
+
+$font-size-h6: .95em; // expected 19px;
+
+
+
+/* Small font-size */
+
+$small-size: 87%;
+
+
+
+/* Font weight */
+
+$normal-weight: 400;
+
+$bold-weight: 700;
+
+
+
+//Breadcrumb
+
+$breadcrumb-bg: transparent; // Inner background colour (Bootstrap override).
+
+$wb-bc-separator-content: ">"; // GCWeb v5
+
+$wb-bc-separator-content-rtl: "<"; // GCWeb v5
+
+$wb-bc-separator-font-size: .7em; // GCWeb v5
+
+
+
+// Forms
+
+$wb-forms-asterisk-width: .87em; // Asterisk offset for required field labels.
+
+
+
+//Heading links on landing pages
+
+$heading-link: 20px; // same as h5
+
+$heading-link-mrgn-tp: 23px;
+
+
+
+// "About this site" footer links
+
+$footer-about-li-horizontal-spacing: .7em;
+
+
+
+/*
+
+Left menu variables
+
+*/
+
+$menu-background: #fff;
+
+$menu-colour: #555;
+
+
+
+// Spaces variables
+
+$space-0: 0px;
+
+$space-md: 15px;
+
+
+
+$input-color-placeholder: #5c5c5c !important;
+
+.body {
+    font-family: 'Helvetica Now'
+}
+
+#wb-bnr+hr {
+    border-top: 3px solid #38414d;
+    margin-bottom: 0px;
+    margin-top: 5px;
+
+    +.container {
+        font-size: 20px;
+    }
+}
+
+.wb-inv {
+    clip: rect(1px,1px,1px,1px);
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 1px;
+}
+
+#wb-info {
+    background: $wbGray;
+    position: relative;
+    z-index: 5;
+
+    a {
+        font-size: .875em;
+        text-decoration: none;
+
+        &.wb-navcurr {
+            font-weight: 800;
+        }
+    }
+
+    .wb-navcurr li {
+
+        display: flex;
+
+        width: 33%;
+
+        float: left;
+
+    }
+
+    .brand {
+        background: #f8f8f8;
+        line-height: 30px;
+
+        object,
+        img {
+            height: 40px;
+            margin-bottom: 2em;
+            margin-top: 20px;
+            width: auto;
+        }
+    }
+
+    .ftr-urlt-lnk {
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            float: left;
+            &:before {
+                content: "\2022";
+                margin-right: $footer-about-li-horizontal-spacing;
+                margin-left: $footer-about-li-horizontal-spacing;
+            }
+
+            &:nth-child(1) {
+                list-style: none
+              }
+        }
+
+    }
+
+    .landscape {
+        background: #26374a url(https://www.ospr.link/landscape.80f363ef24c5920c9c8e.png) no-repeat 100% 100%;
+        display: flex;
+        a {
+            color: #fff;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .tofpg {
+        line-height: 90px;
+
+        a {
+            color: #000;
+
+            span {
+                margin-left: 25px;
+            }
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    nav {
+        padding-bottom: 2em;
+        padding-top: 2em;
+        position: relative;
+
+        li {
+            margin-bottom: .75em;
+        }
+    }
+}
+
+[dir=rtl] {
+    footer {
+        .brand {
+            .text-right {
+                text-align: left;
+            }
+        }
+
+        .tofpg {
+            float: right;
+
+            a {
+                span {
+                    margin-left: 0;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}
+
+/*
+ Banner
+ */
+
+ header {
+	position: relative;
+
+	.brand {
+		margin-bottom: 10px;
+		padding-bottom: 0;
+		padding-top: 10px;
+
+		a {
+			display: block;
+			height: auto;
+			padding-bottom: 0;
+			position: relative;
+			text-decoration: none;
+			width: auto;
+
+			&:after {
+				bottom: 0;
+				content: "";
+				left: 0;
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+		}
+
+		// Needed for backwards compatibility with GCWeb 4.0.27 and below's HTML markup.
+		// Remove object references from all of this theme's logo selectors in GCWeb 4.1+.
+		img,
+		object {
+			height: auto;
+			max-height: 40px;
+		}
+
+		img {
+			margin-bottom: .375em;
+		}
+	}
+}
+
+/*
+ * Mobile Chevron
+ */
+#wb-glb-mn {
+	margin-top: 20px;
+
+	ul {
+		min-width: 150px;
+
+		&.chvrn {
+			background: $accent-blue;
+			display: inline-block;
+			float: right;
+			height: 2.75em;
+
+			li {
+				display: block;
+				padding-right: 0;
+
+				a {
+					color: #fff;
+					display: block;
+					font-size: 1.9em;
+					padding: 5px 20px 0 0;
+				}
+			}
+
+			span {
+				.glyphicon-th-list {
+					padding-left: 12px;
+					top: 0;
+				}
+			}
+
+			&:before {
+				border-bottom: 1.375em solid transparent;
+				border-left: .6875em solid #f8f8f8;
+				border-top: 1.375em solid transparent;
+				content: " ";
+				display: block;
+				float: left;
+				height: 0;
+				position: relative;
+				width: 0;
+			}
+		}
+	}
+}
+
+/* IE Tweaks */
+.lt-ie9 {
+	header {
+		.brand {
+			a {
+				margin-top: 0;
+			}
+
+			img {
+				height: 40px;
+			}
+		}
+	}
+}
+
+[dir=rtl] {
+	header {
+		.brand {
+			float: right;
+		}
+	}
+
+	#wb-glb-mn {
+		ul {
+			&.chvrn {
+				padding-left: 1.5em;
+				padding-right: 0;
+				text-align: left;
+
+				span {
+					.glyphicon-th-list {
+						padding-left: 0;
+						padding-right: 10px;
+					}
+				}
+
+				&:before {
+					border-left: 0;
+					border-right: 11px solid #f8f8f8;
+					float: right;
+				}
+			}
+		}
+	}
+}
+
+/* Home page banner */
+#hme-banner {
+	background-image:url(../assets/your-gov2.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: auto;
+	padding-top:1.25%;
+	width: 100%;
+}
+#hme-banner-bg {
+	background-color: #002b92;
+	color:#fff;
+	margin-left: 5%;
+	min-height: 150px;
+	padding:8px;
+	width: 225px;
+}
+h2.hme-banner-bg {
+	border: none;
+}
+
+/*
+ * Search
+ */
+ #wb-srch,
+ .srchbox {
+     padding-top: 1em;
+ 
+     .submit {
+         position: absolute;
+         right: 15px;
+         top: 1em;
+     }
+ 
+     input,
+     button {
+         border-radius: 0;
+     }
+ 
+     button {
+         background-color: #26374a;
+         border: 0;
+         border-bottom: #26374a solid 1px;
+         font-size: 17px;
+ 
+         &:hover,
+         &:focus,
+         &:active {
+             background: #444;
+         }
+     }
+ 
+     .glyphicon {
+         top: auto;
+         vertical-align: middle;
+     }
+ 
+     input {
+         border-color: #e0e0e0;
+         border-style: solid;
+         box-shadow: none;
+         color: #555;
+         position: relative;
+     }
+ 
+     .wb-srch-qry {
+         width: 100%;
+ 
+         input {
+             max-width: inherit;
+             width: 100%;
+         }
+     }
+ }
+ 
+ #wb-srch-sub {
+     margin-left: 5px;
+ }
+ 
+ [dir=rtl] {
+     #wb-srch {
+         text-align: left;
+ 
+         input {
+             margin-left: -4px;
+             margin-right: auto;
+         }
+     }
+ 
+     #wb-srch-sub {
+         margin: {
+             left: 0;
+             right: 5px;
+         }
+     }
+ }
+ 
+ input#wb-srch-q {
+     width: 100%;
+ }
+ 

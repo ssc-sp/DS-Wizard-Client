@@ -1,0 +1,77 @@
+version: '3'
+services:
+
+  dsw-server:
+    image: datastewardshipwizard/wizard-server:3.14.0
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - minio
+    volumes:
+      - ./dsw.yml:/application/engine-wizard/config/application.yml:ro
+
+  dsw-client:
+    image: dsw-client-ssc
+    #image: datastewardshipwizard/wizard-client
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      API_URL: http://20.104.20.37:3000
+    volumes:
+      - ./assets/extra.scss:/src/scss/customizations/_extra.scss
+      - ./assets/extra.scss:/src/scss/customizations/_overrides.scss
+      - ./assets/extra.scss:/src/scss/customizations/_variables.scss
+      - ./assets/img:/usr/share/nginx/html/assets
+      #- /home/dsadmin/imagebuild/engine-frontend/dist/engine-wizard:/usr/share/nginx/html
+
+
+  docworker:
+    image: datastewardshipwizard/document-worker:3.14.0
+    restart: always
+    depends_on:
+      - postgres
+      - minio
+      - dsw-server
+    volumes:
+      - ./dsw.yml:/app/config.yml:ro
+
+  postgres:
+    image: postgres:13.2
+    restart: always
+    # (!) Expose only for debugging locally or set-up authentication
+    # ports:
+    #   - 127.0.0.1:15432:5432
+    environment:
+      POSTGRES_DB: engine-wizard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    # (!) Mount for persistent data
+    volumes:
+    #  - db-data:/var/lib/postgresql/data
+    # OR
+    - ./db-data/data:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio
+    command: server /data
+    # (!) Expose only for debugging locally or set-up authentication
+    # ports:
+    #   - 127.0.0.1:19000:9000
+    # (!) Mount and backup for persistent data
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minioPassword
+    # (!) Mount for persistent data
+    volumes:
+    #  - s3-data:/data
+    # OR
+     - ./s3-data/data:/data
+  
+  
+
+# volumes:
+#   db-data:
+#   s3-data:

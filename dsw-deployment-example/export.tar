@@ -1,0 +1,2 @@
+/usr/lib/postgresql/13/bin/pg_dumpall: invalid option -- 'F'
+Try "pg_dumpall --help" for more information.
