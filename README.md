@@ -2,9 +2,12 @@
 
 - [**Data Stewardship Wizard Engine Frontend**](#data-stewardship-wizard-engine-frontend)
   - [**Introduction and context**](#introduction-and-context)
-  - [**Setup**](#setup)
-  - [**Workflow**](#workflow)
-    - [**Development**](#development)
+  - [**Development**](#development)
+    - [**Setup**](#setup)
+    - [**Workflow**](#workflow)
+  - [**Deployment**](#deployment)
+  - [**Workflow**](#workflow-1)
+    - [**Development**](#development-1)
     - [**Implementation**](#implementation)
   - [**Debugging**](#debugging)
   - [**Deprecated**](#deprecated)
@@ -34,12 +37,17 @@ In order to develop, you should:
     The first time you open your Ubuntu subsystem you will prompted to create a UNIX user. Make sure you remember your user and password.
 
     Most macOS computers should be able to run everything from the terminal app.
+3. Have both the following repos cloned anywhere in your computer:
+   ```
+   $ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
+   $ git clone https://github.com/ds-wizard/dsw-deployment-example.git
+   ```
 
 Once you have met these requirements, access your terminal, and run:
 ```
 $ sudo su
 ```
-Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm and elm as well as cloning the necessary repository:
+Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm and elm:
 ```
 $ cd $HOME
 $ apt update
@@ -48,14 +56,17 @@ $ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/bin
 $ gunzip elm.gz
 $ chmod +x elm
 $ sudo mv elm /usr/local/bin/
-$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
-$ git clone https://github.com/ds-wizard/dsw-deployment-example.git
 ```
 Test that everything has been done correctly by running the following:
 ```
 $ node -v
 $ npm --help
 $ elm --help
+```
+Subsystem have access to the hosts' file system through the `/mnt` folder, and so to avoid duplicating the github repos, let us create two symlinks that link to where we originally cloned both repositories:
+```
+$ ln -s /mnt/absolute/path/to/repo/dsw-deployment-example $HOME/dsw-deployment-example
+$ ln -s /mnt/absolute/path/to/repo/DS-Wizard-Client $HOME/DS-Wizard-Client
 ```
 Now let us modify the `docker-compose.yml` file located in `dsw-deployment-example` in order to run our custom image instead of the base image:
 ```
@@ -71,20 +82,26 @@ And edit the `dsw-client` section as such:
       - 127.0.0.1:8080:80
     environment:
       API_URL: http://localhost:3000
+    volumes:
+      - assets/
 ```
-In order to edit, press "i" in your keyboard, do your edits, then press "ESC" followed by ":wq!", which will write your edits and quit the editor. From there, you should be able to fully run your local instance:
+In order to edit, press "i" on your keyboard, do your edits, then press "ESC" followed by ":wq!", which will write your edits and quit the editor. You can also make this edit any other way. From there, you should be able to fully run your local instance:
 ```
 $ cd DS-Wizard-Client
 $ bash scripts/buildimage.sh
 ```
-You can check that your instance is running by accessing [localhost:8080](localhost:8080).
+`buildimage.sh` cleans the environment, tests the application, compiles it, creates the docker image from it and restarts your local instance of `dsw-deployment-example`. You can check that your instance is running by accessing [localhost:8080](localhost:8080).
 
 ### **Workflow**
-In order to make changes to the front-end of DS-Wizard, you need to clone the repository anywhere you are most comfortable with:
+The two repos that you cloned earlier in the setup section are where you will do your work. The `dsw-deployment-example` repo contains the architecture of the whole application. With docker, this architecture is a simple list of images and how they interact with each other. The whole architecture is comprised within `docker-compose.yml`. There are many images that make DS-Wizard, but our goal is to work on only one of them, the front-end. The `DS-Wizard-Client` repo is used to create the front-end image, "dsw-client-ssc".
+
+The front-end is a NodeJs application: it uses elm to create the entirety of the front end, then compiles it into a javascript distributable, which is then packaged into a container. Elm is a programming language meant to combine HTML and Javascript together. All elm files for the client are located in `DS-Wizard-Client/engine-wizard/elm/` but the only one of interest is the following:
 ```
-$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
+DS-Wizard-Client/engine-wizard/elm/Wizard/Common/View/Layout.elm
 ```
-You will not be 
+The object of interest is the `app` object, which contains the appview.
+
+In addition, SCSS styling is applied afterward on the app. You can find all the css files
 
 ## **Deployment**
 
