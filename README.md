@@ -43,34 +43,36 @@ Once you have met these requirements, access your Linux terminal, and run:
 ```
 $ sudo su
 ```
-Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm, dos2unix and elm:
+Which will give you root access after entering your password. Afterwards, you will need to set everything up in your `$HOME` folder. This includes installing nodejs, npm and dos2unix:
 ```
 $ cd $HOME
 $ apt update
-$ apt install nodejs npm dos2unix
-$ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
-$ gunzip elm.gz
-$ chmod +x elm
-$ mv elm /usr/local/bin/
-$ dos2unix DS-Wizard/scripts/buildimage.sh
+$ apt install npm dos2unix
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+$ source ~/.bashrc
+$ nvm install 18.7.0
 ```
 Test that everything has been done correctly by running the following:
 ```
 $ node -v
 $ npm --help
-$ elm --help
 ```
-Subsystem have access to the hosts' file system through the `/mnt` folder, and so to avoid duplicating the github repo, let us create a symlink that links to where we originally cloned our repository:
+Subsystem have access to the host's file system through the `/mnt` folder, and so, there is a unix path to the github repo you created earlier on your host machine (`/unix/path/to/repo`). Creating a symlink of the entire repository causes issue and so we circumvent this by doing the following:
 ```
-$ ln -s /mnt/absolute/path/to/repo/DS-Wizard-Client $HOME/DS-Wizard-Client
+$ cd $HOME
+$ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
+$ cd DS-Wizard-Client
+$ rm -r engine-wizard
+$ rm -r dsw-deployment-example/assets
+$ ln -s /unix/path/to/repo/DS-Wizard-Client/engine-wizard engine-wizard
+$ ln -s /unix/path/to/repo/DS-Wizard-Client/dsw-deployment-example/assets dsw-deployment-example/assets
 ```
-Then, you will need to install the npm dependencies:
+These commands create symlinks of the folders in which we will work. This way your local install on your subsystem has its own structure but uses certain files from the repository on your host machine. Afterwards we install the dependencies:
 ```
 $ npm install
 ```
 From there, you should be able to fully run your local instance:
 ```
-$ cd DS-Wizard-Client
 $ bash scripts/buildimage.sh
 ```
 `buildimage.sh` cleans the environment, tests the application, compiles it, creates the docker image from it and restarts your local instance of `dsw-deployment-example`. You can check that your instance is running by accessing [localhost:8080](localhost:8080).
@@ -92,9 +94,15 @@ DS-Wizard-Client/dsw-deployment-example/assets/variables.scss
 ```
 You can read more about the role of each of these files [here](https://docs.ds-wizard.org/en/latest/admin/configuration.html#Client).
 
-Your work should be fully within these 4 files (or more if you have to extend to other .elm files). After making changes, save them and running the following from the root of the github repository will rebuild the image and restart the instance with your new changes:
+Your work should be fully within these 4 files (or more if you have to extend to other .elm files). If you modify the elm file, you will need to rebuild the docker image:
 ```
 $ bash scripts/buildimage.sh
+```
+If you only edited the scss files, you can simply restart the application:
+```
+$ cd dsw-deployment-example
+$ docker-compose down
+$ docker-compose up -d
 ```
 You should be able to see your new changes on [localhost:8080](localhost:8080).
 
