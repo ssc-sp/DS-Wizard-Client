@@ -62,9 +62,9 @@ Subsystem have access to the host's file system through the `/mnt` folder, and s
 $ cd $HOME
 $ git clone https://github.com/ssc-sp/DS-Wizard-Client.git
 $ cd DS-Wizard-Client
-$ rm -r engine-wizard
+$ rm -r engine-wizard/elm
 $ rm -r dsw-deployment-example/assets
-$ ln -s /unix/path/to/repo/DS-Wizard-Client/engine-wizard engine-wizard
+$ ln -s /unix/path/to/repo/DS-Wizard-Client/engine-wizard/elm engine-wizard/elm
 $ ln -s /unix/path/to/repo/DS-Wizard-Client/dsw-deployment-example/assets dsw-deployment-example/assets
 ```
 These commands create symlinks of the folders in which we will work. This way your local install on your subsystem has its own structure but uses certain files from the repository on your host machine. Afterwards we install the dependencies:
